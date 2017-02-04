@@ -1,0 +1,146 @@
+﻿
+@{
+    ViewBag.Title = "Resumen de Ventas";
+}
+<div class="row">
+    @if (@ViewBag.rol == "contador")
+    {
+        @Html.Partial("MenuContador")
+    }
+    else
+    {
+        @Html.Partial("MenuAdministrador")
+    }
+    <div class="col-lg-6">
+        <h2>Resumen de Ventas</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th colspan="4">
+                        <select class="form-control" onchange="enableRangosReportes(this.value)">
+                            <option value="mes">Vista por Mes</option>
+                            <option value="fechas">Vista por rango de fechas</option>
+                        </select>
+                    </th>
+                </tr>
+                <tr id="rango-mes">
+                    <th ><p>Resumen de Ventas del mes de</p></th>
+                    <th colspan="3"><input class="form-control" type="month" value="@ViewBag.mes" onchange="reporteMes(this.value)" /></th>
+                </tr>
+                <tr class="comision-user" id="rango-fechas">
+                    <th>
+                        <p>Desde:</p>
+                        <input id="fechaDesde" class="form-control" type="date" value="@ViewBag.fecha" onchange="reportesRango()" />
+                    </th>
+                    <th colspan="3">
+                        <p>Hasta:</p>
+                        <input id="fechaHasta" class="form-control" type="date" value="@ViewBag.fecha" onchange="reportesRango()"/>
+                    </th>
+                </tr>
+                <tr class="head-reporte-mes">
+                    <th><p>Agente</p></th>
+                    <th><p>Total Venta</p></th>
+                    <th><p>Total Pagado</p></th>
+                    <th><p>Diferencia</p></th>
+                </tr>
+            </thead>
+            <tbody id="tbodyVentasMes">
+                @foreach (var item in ViewBag.reportesMes)
+                {
+                    <tr>
+                        <th>@item.agente</th>
+                        <th>$ @item.total</th>
+                        <th>$ @item.totalpagado</th>
+                        <th>$ @item.diferencia</th>
+                    </tr>
+                }
+                @foreach (var item in ViewBag.reportesVentasNo)
+                {
+                    <tr>
+                        <th>@item.nombre</th>
+                        <th>$ 0</th>
+                        <th>$ 0</th>
+                        <th>$ 0</th>
+                    </tr>
+                }
+                @foreach (var item in ViewBag.reportesMesGral)
+                {
+                    <tr>
+                        <th>Totales Generales</th>
+                        <th>$ @item.total</th>
+                        <th>$ @item.totalpagado</th>
+                        <th>$ @item.diferencia</th>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-lg-6" id="grafica-mes">
+        <canvas id="chart-venta-mes" width="500" height="550"></canvas>
+    </div>
+</div>
+<script>
+    var fecha = new Date();
+    var agentes = new Array();
+    var totales = new Array();
+    var pagado = new Array();
+    var diferencia = new Array();
+    var mes = (fecha.getMonth() + 1) < 10 ? "0" + (fecha.getMonth() + 1) : (fecha.getMonth() + 1);
+    $.ajax({
+        url: 'reporteVentasGrafica',
+        type: 'post',
+        dataType: 'json',
+        data: { fecha: fecha.getFullYear() +'-'+ mes }
+    }).done(function (respuesta) {
+        for (x = 0; x < respuesta.agenteVentas.length; x++) {
+            agentes.push(respuesta.agenteVentas[x].agente);
+            totales.push(respuesta.agenteVentas[x].total)
+            pagado.push(respuesta.agenteVentas[x].totalpagado);
+            diferencia.push(respuesta.agenteVentas[x].diferencia);
+            //alert(agentes);
+        };
+        for (x = 0; x < respuesta.agentes.length; x++) {
+            agentes.push(respuesta.agentes[x].nombre);
+            totales.push(0);
+            pagado.push(0);
+            diferencia.push(0);
+            //alert(agentes);
+        };
+        var ctx = document.getElementById("chart-venta-mes");
+        var cvs = ctx.getContext("2d");
+        var myChart = new Chart(cvs, {
+            type: 'bar',
+            data: {
+                labels: agentes,
+                datasets: [
+                    {
+                        label: 'Total',
+                        backgroundColor:"#00695C",
+                        data: totales
+                    },
+                    {
+                        label: 'Total Pagado',
+                        backgroundColor: "#FFC107",
+                        data: pagado
+                    },
+                    {
+                        label: 'Diferencia',
+                        backgroundColor: "#C62828",
+                        data: diferencia
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                },
+                responsive: true
+            }
+
+        });
+    });
+</script>

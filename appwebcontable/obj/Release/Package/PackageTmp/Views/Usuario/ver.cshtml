@@ -1,0 +1,60 @@
+﻿
+@{
+    ViewBag.Title = "ver";
+}
+<div class="row">
+    @Html.Partial("MenuAdministrador")
+    <h2>Ver Usuarios</h2>
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th colspan="6">
+                    <select class="form-control" id="temporada" name="temporada" onchange="cambioTemporada(this.value)">
+                        @if (ViewBag.temporada == 1)
+                        {
+                            <option value="1">Temporada Alta</option>
+                            <option value="2">Temporada Baja</option>
+                        }
+                        else
+                        {
+                            <option value="2">Temporada Baja</option>
+                            <option value="1">Temporada Alta</option>
+                        }
+                        
+                    </select>
+                </th>
+            </tr>
+            <tr>
+                <th align="center">Nombre</th>
+                <th align="center">Apellidos</th>
+                <th align="center">Telefono</th>
+                <th align="center">Email</th>
+                <th align="center">Rol</th>
+                <th align="center">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in ViewBag.vistaListaUsuarios)
+            {
+                <tr>
+                    <th>@item.nombre</th>
+                    <th>@item.apellidos</th>
+                    <th>@item.telefono</th>
+                    <th>@item.email</th>
+                    <th>@item.rol</th>
+                    @if (@item.status == 1)
+                    {
+                        <th><button class="btn btn-success" onclick="userDisable(@item.id)" >Activo</button></th>
+                    }
+                    else
+                    {
+                        <th><button class="btn btn-danger" onclick="userEnable(@item.id)" >Inactivo</button></th>
+                    }
+                    
+                </tr>
+            }
+        </tbody>
+
+    </table>
+</div>

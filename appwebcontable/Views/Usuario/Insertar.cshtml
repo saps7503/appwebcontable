@@ -1,0 +1,59 @@
+﻿@{
+    ViewBag.Title = "Insertar";
+}
+
+    <div class="row">
+            @Html.Partial("MenuAdministrador")
+        <div class="col-lg-8 col-lg-offset-3">
+            <h2>Registrar Usuario</h2>
+            <form id="form-usuario" method="post" action="Registrar">
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label>Nombre:</label>
+                        <input id="nombre" class="form-control" type="text" name="nombre" required />
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Apellidos:</label>
+                        <input id="apellidos" class="form-control" type="text" name="apellidos" required />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label>Telefono:</label>
+                        <input id="telefono" class="form-control" type="text" name="telefono" required />
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>E-mail:</label>
+                        <input id="email" class="form-control" type="email" name="email" required />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label>Password:</label>
+                        <input id="password" class="form-control" type="password" name="password" required />
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="control-label">Rol de Usuario:</label>
+                        <select id="rol" class="form-control" name="rol" onchange="addInputComision(this.value)" required>
+                            <option value="contador">Contador</option>
+                            <option value="agente de ventas">Agente de Ventas</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group comision-user col-md-4">
+                        <label>Comision %:</label>
+                        <input id="comision" class="form-control" type="number" name="comision" step="any" value="0" required />
+                    </div>
+                    <div class="form-group comision-user col-md-4">
+                        <label>Temporada:</label>
+                        <select class="form-control" id="temporada" required>
+                            <option value="1">Alta</option>
+                            <option value="2">Baja</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Registrar</button>
+            </form>
+        </div>
+    </div>

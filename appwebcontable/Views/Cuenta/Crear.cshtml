@@ -1,0 +1,58 @@
+﻿
+@{
+    ViewBag.Title = "Crear";
+}
+<div class="row">
+    @Html.Partial("MenuContador")
+    
+    <div class="col-lg-5 col-lg-offset-4">
+            <h2>Registrar Cta. Bancaria</h2>
+            <form id="form-cuenta" method="post">
+                <div class="form-group">
+                    <label>Banco:</label>
+                    <select id="bancos" class="form-control" name="banco" required>
+                        @foreach (var item in ViewBag.vistaListaBancos)
+                        {
+                            <option value="@item.nombre">@item.nombre</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Referencia (Alias):</label>
+                    <input id="alias" class="form-control" type="text" name="alias" required />
+                </div>
+                <div class="form-group">
+                    <label>Número de Cuenta:</label>
+                    <input id="numeroCuenta" class="form-control" type="text" name="numerocuenta" required />
+                </div>
+
+                <div class="form-group">
+                    <label>Saldo de Cuenta:</label>
+                    <input id="cantidad" class="form-control" type="number" name="cantidad" step="any" required />
+                </div>
+                <div class="form-group">
+
+                    <div>
+                        <input class="btn btn-default creaBanco" type="button" value="Nuevo Banco" name="crear" required />
+                        <input class="btn btn-default" type="submit" value="Registrar" name="registrar" required />
+                    </div>
+                </div>
+            </form>
+        
+    </div>
+
+
+    <div class="overlay-container-bank modal">
+        <div class="window-container-bank zoomin">
+            <div align="right"><span class="glyphicon glyphicon-remove close-bank"></span></div>
+            <h3>Nuevo Banco</h3>
+            <br />
+            <form id="nuevoBanco" method="post" class="form-inline" role="form">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="nameBanco" placeholder="Nombre del Banco" required>
+                </div>
+                <button type="submit" class="btn btn-default">Guardar</button>
+            </form>
+        </div>
+    </div>
+</div>

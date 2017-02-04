@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewBag.Title = "Cuentas";
+}
+<div class="row">
+    @if (@ViewBag.rol == "contador")
+    {
+        @Html.Partial("MenuContador")
+    }
+    else
+    {
+        @Html.Partial("MenuAdministrador")
+    }
+    
+    <h2>Cuentas</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th align="center">Referencia</th>
+                <th align="center">Banco</th>
+                <th align="center">Número de Cuenta</th>
+                <th align="center">Salto Actual</th>
+                <th align="center">Fecha de Ultima Modificación</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in ViewBag.vistaListaCuentas)
+            {
+                <tr>
+                    <th>@item.referencia</th>
+                    <th>@item.banco</th>
+                    <th>@item.numeroCuenta</th>
+                    <th>@item.saldoTotal MXN$</th>
+                    <th>@item.fechaModificacion</th>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+</div>

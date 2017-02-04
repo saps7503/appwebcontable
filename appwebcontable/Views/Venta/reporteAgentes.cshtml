@@ -1,0 +1,178 @@
+﻿
+@{
+    ViewBag.Title = "Reporte de Agentes";
+}
+<div class="row">
+    @if (@ViewBag.rol == "contador")
+    {
+        @Html.Partial("MenuContador")
+    }
+    else
+    {
+        @Html.Partial("MenuAdministrador")
+    }
+    <h2>Reporte de Agentes</h2>
+    <table class="table table-condensed">
+        <thead>
+            <tr>
+                <th colspan="4">
+                    <select id="agents" class="form-control" onchange="reporteGraficaAgentes()">
+                        @foreach (var item in ViewBag.agentes)
+                        {
+                            <option value="@item.id">@item.nombre</option>
+                        }
+                    </select>
+                </th>
+            </tr>
+            <tr>
+                <th>
+                    <p>Desde:</p>
+                    <input id="inicio" class="form-control" type="date" onchange="reporteGraficaAgentes()" value="@ViewBag.fecha" />
+                </th>
+                <th colspan="3">
+                    <p>Hasta:</p>
+                    <input id="final" class="form-control" type="date" onchange="reporteGraficaAgentes()" value="@ViewBag.fechaFinal" />
+                </th>
+            </tr>
+            <tr class="head-reporte-mes">
+                <th><p>Fecha</p></th>
+                <th><p>Total</p></th>
+                <th><p>Anticipo</p></th>
+                <th><p>Saldo</p></th>
+                <th><p>Total Venta</p></th>
+                <th><p>Total Pagado</p></th>
+                <th><p>Diferencia</p></th>
+            </tr>
+        </thead>
+        <tbody id="tbodyReporte">
+            @if (ViewBag.cantAgentes > 0)
+            {
+                
+                foreach (var item in ViewBag.ConteoMes)
+                {
+                    var ban = false;
+                    foreach (var item2 in ViewBag.reporteAgentes)
+                    {
+                        <tr>                      
+                           @if (@item.formatFecha() == @item2.formatFecha())
+                           {
+                                if (!ban)
+                                {
+                                    <th rowspan=@item.cont >@item.formatFecha()</th>
+                                    
+                                }
+                                <th>@item2.total</th>
+                                <th>@item2.anticipo</th>
+                                <th>@item2.saldo</th>
+                               if (!ban)
+                               {
+                                <th rowspan=@item.cont >@item2.totalventa</th>
+                                <th rowspan=@item.cont >@item2.totalpagado</th>
+                                <th rowspan=@item.cont >@item2.diferencia</th>
+                                   ban = true;
+                               }
+                           }
+                        </tr>
+                    }
+                }
+
+                foreach (var item in ViewBag.totales)
+                {
+                    <tr>
+                        <th colspan="4">Totales</th>
+                        <th>@item.total</th>
+                        <th>@item.totalpagado</th>
+                        <th>@item.diferencia</th>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr><th colspan="8">Noy hay Registros</th></tr>
+            }
+        </tbody>
+    </table>
+    <div id="grafica-agente" class="col-lg-12">
+        <p>Grafica de Ventas</p>
+        <canvas id="chart-venta-agente" width="1000" height="400"></canvas>
+    </div>
+</div>
+<script>
+    var fecha = new Date();
+    var fechas = new Array();
+    var total = new Array();
+    var anticipo = new Array();
+    var saldo = new Array();
+    var mes = (fecha.getMonth() + 1) < 10 ? "0" + (fecha.getMonth() + 1) : (fecha.getMonth() + 1);
+    $.ajax({
+        url: 'reporteAgentesGrafica',
+        type: 'post',
+        dataType: 'json',
+        data: { id: $("#agents").val(), anio: fecha.getFullYear(), mes: mes }
+    }).done(function (respuesta) {
+        
+        for (x = 0; x < respuesta.registros.length; x++) {
+            var f = respuesta.registros[x].fecha.split(' ');
+            var a = fechas.indexOf(f[0]);
+            if (a == -1) {
+                fechas.push(f[0]);
+                total.push(respuesta.registros[x].totalventa);
+                anticipo.push(respuesta.registros[x].totalpagado);
+                saldo.push(respuesta.registros[x].diferencia);
+            }
+            
+            
+        };
+        if (respuesta.registros.length != 0) {
+            var ctx = document.getElementById("chart-venta-agente");
+            var cvs = ctx.getContext("2d");
+            var myChart = new Chart(cvs, {
+                type: 'line',
+                data: {
+                    labels: fechas,
+                    datasets: [
+                        {
+                            label: 'Diferencia',
+                            backgroundColor: "#C62828",
+                            fill: false,
+                            lineTension: 0.1,
+                            borderCapStyle: 'butt',
+                            borderColor: "#C62828",
+                            data: saldo
+                        },
+                        {
+                            label: 'Total Pagado',
+                            backgroundColor: "#FFC107",
+                            fill: false,
+                            lineTension: 0.1,
+                            borderCapStyle: 'butt',
+                            borderColor: "#C62828",
+                            data: anticipo
+                        },
+                        {
+                            label: 'Total de Venta',
+                            backgroundColor: "#00695C",
+                            fill: false,
+                            lineTension: 0.1,
+                            borderCapStyle: 'butt',
+                            borderColor: "#C62828",
+                            data: total
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    },
+                    responsive: true
+                }
+
+            });
+        }
+    });
+</script>
+

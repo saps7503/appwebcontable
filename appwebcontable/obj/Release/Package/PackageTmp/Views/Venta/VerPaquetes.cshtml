@@ -1,0 +1,89 @@
+﻿
+@{
+    ViewBag.Title = "VerPaquetes";
+}
+<div class="row">
+    @Html.Partial("MenuAdministrador")
+    <h2>Paquetes</h2>
+    <table class="table">
+        <input type="hidden" id="tempo-hide" value=@ViewBag.temporada />
+        <thead>
+            <tr><th colspan="4"><p>Buscar:</p><input id="searchPack" class="searchPack" type="text" placeholder="Busqueda" /></th></tr>
+            <tr>
+                <th><p>Nombre</p></th>
+                <th><p>Precio MXN$</p></th>
+                <th><p>Días</p></th>
+                <th><p>Opciones</p></th>
+            </tr>
+        </thead>
+        <tbody id="tbodyPack">
+            @foreach (var item in ViewBag.vistaListaPaquetes)
+            {
+            <tr>
+                <th>@item.nombre</th>
+                @if (@ViewBag.temporada == 1)
+                {
+                    <th>@item.costo_alta</th>
+                }
+                else
+                {
+                    <th>@item.costo_baja</th>
+                }
+                <th>@item.dias</th>
+                <th>
+                    <input class="btn btn-primary detalles" onclick="verPaquete(@item.id)" type="button" value="Detalles" />
+                    @if (@item.estatus == 1)
+                    {
+                        <input class="btn btn-success" onclick="disablePaquete(@item.id)" type="button" value="Activo" />
+
+                    }
+                    else
+                    {
+                        <input class="btn btn-danger" onclick="enablePaquete(@item.id)" type="button" value="Inactivo" />
+                    }
+                    <a class="btn btn-warning" href="EditarPaquete?idPaquete=@item.id">Editar</a>
+                </th>
+
+            </tr>
+            }
+        </tbody>
+    </table>
+    <div class="overlay-container-pack modal">
+        <div class="window-container zoomin">
+            <div align="right"><span class="glyphicon glyphicon-remove close"></span></div>
+            <h3 align="center">Detalles de Paquete</h3>
+            <br />
+            <hr />
+            <form method="post">
+                <table>
+                    <tr>
+                        <th><p class="text-data">Nombre:</p></th>
+                        <th><p id="nombreM" class="text-data"></p></th>
+                    </tr>
+                    <tr>
+                        <th><p class="text-data">Costo Temporada Alta:</p></th>
+                        <th><p id="precioaltaM" class="text-data"></p></th>
+                    </tr>
+                    <tr>
+                        <th><p class="text-data">Costo Temporada Baja:</p></th>
+                        <th><p id="preciobajaM" class="text-data"></p></th>
+                    </tr>
+                    <tr>
+                        <th><p class="text-data">Días:</p></th>
+                        <th><p id="diasM" class="text-data"></p></th>
+                    </tr>
+                    <tr>
+                        <th><p class="text-data">Incluye:</p></th>
+                        <th><p id="incluyeM" class="text-data"></p></th>
+                    </tr>
+                    <tr>
+                        <th><p class="text-data">Itinerario:</p></th>
+                        <th><p id="itinerarioM" class="text-data"></p></th>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+
+

@@ -1,0 +1,108 @@
+﻿
+@{
+    ViewBag.Title = "Movimientos";
+}
+<div class="row">
+    @Html.Partial("MenuContador")
+    <h2>Transacciones</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th><p>Buscar:</p><input id="sGral" class="searchGral" type="text" placeholder="Busqueda" /></th>
+                <th colspan="5">
+                    <p>Cuentas Bancarias:</p>
+                    <select id="cuenta" class="form-control" name="cuenta" onchange="verCuentasMov(this.value)" required>
+                        @foreach (var item in ViewBag.vistaListaCuentas)
+                        {
+                            <option value="@item.id">@item.referencia: @item.numeroCuenta</option>
+                        }
+                    </select>
+                </th>
+            </tr>
+            <tr>
+                <th align="center"><p id="titleFecha">Fecha</p><input id="sFecha" class="search" type="text" placeholder="Fecha" /></th>
+                <th align="center"><p id="titleDescripcion">Descripción</p><input id="sDescripcion" class="search" type="text" placeholder="Descripcion" /></th>
+                <th align="center"><p id="titleDeposito">Deposito</p><input id="sDeposito" class="search" type="text" placeholder="Deposito" /></th>
+                <th align="center"><p id="titleRetiro">Retiro</p><input id="sRetiro" class="search" type="text" placeholder="Retiro" /></th>
+                <th align="center"><p id="titleSaldo">Saldo</p><input id="sSaldo" class="search" type="text" placeholder="Saldo" /></th>
+                <th align="center"><p id="titleOpciones">Opciones</p></th>
+            </tr>
+        </thead>
+        <tbody id="tbodyMov">
+            @foreach (var item in ViewBag.vistaListaMovimientos)
+            {
+                <tr>
+                    <th>@item.fecha</th>
+                    <th>@item.descripcion</th>
+                    <th>@item.deposito MXN$</th>
+                    <th>@item.retiro MXN$</th>
+                    <th>@item.saldoMXM MXN$</th>
+                    <th>
+                        <input class="btn btn-success detalles" onclick="ver(@item.id)" type="button" value="Detalles" />
+                    </th>
+
+                </tr>
+            }
+        </tbody>
+
+    </table>
+    <div class="overlay-container modal">
+        <div class="window-container zoomin">
+            <div align="right"><span class="glyphicon glyphicon-remove close"></span></div>
+            <h3 align="center">Detalles de Transacción</h3>
+            <br />
+            <hr />
+            <table>
+                <tr>
+                    <th><p class="text-data">Fecha:</p></th>
+                    <th><p id="fechaM" class="text-data"></p></th>
+                </tr>
+                <tr>
+                    <th><p class="text-data">Realizado por:</p></th>
+                    <th><p id="porM" class="text-data"></p></th>
+                </tr>
+                <tr>
+                    <th><p class="text-data">Descripción:</p></th>
+                    <th><p id="desM" class="text-data"></p></th>
+                </tr>
+                <tr>
+                    <th><p class="text-data">Referencia:</p></th>
+                    <th><p id="refM" class="text-data"></p></th>
+                </tr>
+                <tr>
+                    <th><p class="text-data">Autorización:</p></th>
+                    <th><p id="autoM" class="text-data"></p></th>
+                </tr>
+                <tr>
+                    <th><p class="text-data">Concepto:</p></th>
+                    <th><p id="concepM" class="text-data"></p></th>
+                </tr>
+                <tr>
+                    <th><p class="text-data">Banco:</p></th>
+                    <th><p id="banM" class="text-data"></p></th>
+                </tr>
+                <tr>
+                    <th><p class="text-data">Cuenta:</p></th>
+                    <th><p id="ctaM" class="text-data"></p></th>
+                </tr>
+                <tr>
+                    <th><p class="text-data">Deposito:</p></th>
+                    <th><p id="depM" class="text-data"></p></th>
+                </tr>
+                <tr>
+                    <th><p class="text-data">Retiro:</p></th>
+                    <th><p id="retM" class="text-data"></p></th>
+                </tr>
+                <tr>
+                    <th><p class="text-data">Saldo:</p></th>
+                    <th><p id="saldoM" class="text-data"></p></th>
+                </tr>
+                <tr>
+                    <th><p class="text-data">Ultima Fecha de Modificación:</p></th>
+                    <th><p id="modM" class="text-data"></p></th>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+

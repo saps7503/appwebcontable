@@ -1,0 +1,67 @@
+﻿
+@{
+    ViewBag.Title = "Cotizaciones";
+}
+<div class="row">
+    @Html.Partial("MenuAgenteDeVentas")
+    <h2>Cotizaciones</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <p>Fecha</p>
+                    <input onchange="CotizacionPorFecha(this.value)" id="fecha-dia" class="form-control" type="date" value="@ViewBag.fecha" />
+                </th>
+            </tr>
+            <tr>
+                <th><p>Cliente</p></th>
+                <th><p>Correo</p></th>
+                <th><p>Dirección</p></th>
+                <th><p>Opciones</p></th>
+            </tr>
+        </thead>
+        <tbody id="tbodyCotizacion">
+           @foreach (var item in ViewBag.vistaCotizacion)
+            {
+            <tr>
+                <th>@item.cliente</th>
+                <th>@item.clienteCorreo</th>
+                <th>@item.direccion</th>
+                <th>
+                    <input class="btn btn-success detalles" onclick="verCotizacion(@item.id)" type="button" value="Detalles" />
+                </th>
+
+            </tr>
+           }
+        </tbody>
+    </table>
+    <div class="overlay-container modal">
+        <div class="window-container zoomin">
+            <div align="right"><span class="glyphicon glyphicon-remove close"></span></div>
+            <h3 align="center">Detalles de Cotización</h3>
+            <br />
+            <hr />
+            <form method="post">
+                <table>
+                    <tr>
+                        <th><p class="text-data">Cliente:</p></th>
+                        <th><p id="clienteM" class="text-data"></p></th>
+                    </tr>
+                    <tr>
+                        <th><p class="text-data">Correo:</p></th>
+                        <th><p id="correoM" class="text-data"></p></th>
+                    </tr>
+                    <tr>
+                        <th><p class="text-data">Dirección:</p></th>
+                        <th><p id="direccionM" class="text-data"></p></th>
+                    </tr>
+                    <tr>
+                        <th><p class="text-data">Contenido Pdf:</p></th>
+                        <th><p id="contenidoM" class="text-data"></p></th>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+

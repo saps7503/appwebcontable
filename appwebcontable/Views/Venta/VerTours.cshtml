@@ -1,0 +1,95 @@
+﻿
+@{
+    ViewBag.Title = "VerTours";
+}
+<div class="row">
+    @Html.Partial("MenuAdministrador")
+    <h2>Tours</h2>
+    <table class="table">
+        <input type="hidden" id="tempo-hide" value=@ViewBag.temporada />
+        <thead>
+            <tr><th colspan="4"><p>Buscar:</p><input id="searchTour" class="searchTour" type="text" placeholder="Busqueda" /></th></tr>
+            
+            <tr>
+                
+                <th><p>Nombre</p></th>
+                <th><p>Precio MXN$</p></th>
+                <th><p>Opciones</p></th>
+            </tr>
+        </thead>
+        <tbody id="tbodyTour">
+            @foreach (var item in ViewBag.vistaListaTours)
+            {
+                <tr>
+                    <th>@item.tour</th>
+                    @if (@ViewBag.temporada == 1)
+                    {
+                        <th>@item.costo_alta</th>
+                    }else{
+                        <th>@item.costo_baja</th>
+                    }
+                    
+                    <th>
+                        <input class="btn btn-primary detalles" onclick="verTour(@item.id_tour)" type="button" value="Detalles" />
+                        @if (@item.estatus == 1)
+                        {
+                            <input class="btn btn-success" onclick="disableTour(@item.id_tour)" type="button" value="Activo" />
+
+                        }
+                        else
+                        {
+                            <input class="btn btn-danger" onclick="enableTour(@item.id_tour)" type="button" value="Inactivo" />
+                        }
+                        <a class="btn btn-warning" href="EditarTour?idTour=@item.id_tour">Editar</a>
+                    </th>
+                    
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="overlay-container-tour modal">
+        <div class="window-container zoomin">
+            <div align="right"><span class="glyphicon glyphicon-remove close"></span></div>
+            <h3 align="center">Detalles de Tour</h3>
+            <br />
+            <hr />
+            <form method="post">
+                <table>
+                    <tr>
+                        <th><p class="text-data">Nombre:</p></th>
+                        <th><p id="nombreMT" class="text-data"></p></th>
+                    </tr>
+                    <tr>
+                        <th><p class="text-data">Saliendo de:</p></th>
+                        <th><p id="saleM" class="text-data"></p></th>
+                    </tr>
+                    <tr>
+                        <th><p class="text-data">Descripcion:</p></th>
+                        <th><p id="descripcionM" class="text-data"></p></th>
+                    </tr>
+                    <tr>
+                        <th><p class="text-data">Hora de Salida:</p></th>
+                        <th><p id="salidaM" class="text-data"></p></th>
+                    </tr>
+                    <tr>
+                        <th><p class="text-data">Hora de Regreso:</p></th>
+                        <th><p id="regresoM" class="text-data"></p></th>
+                    </tr>
+                    <tr>
+                        <th><p class="text-data">Duración:</p></th>
+                        <th><p id="duracionM" class="text-data"></p></th>
+                    </tr>
+                    <tr>
+                        <th><p class="text-data">Costo temporada alta:</p></th>
+                        <th><p id="tempAltaM" class="text-data"></p></th>
+                    </tr>
+                    <tr>
+                        <th><p class="text-data">Costo temporada baja:</p></th>
+                        <th><p id="tempBajaM" class="text-data"></p></th>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+

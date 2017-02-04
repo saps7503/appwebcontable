@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewBag.Title = "CrearPaquete";
+}
+
+<div class="row">
+    @Html.Partial("MenuAdministrador")
+    <div class="col-lg-12">
+        <h2>Crear Paquete</h2>
+        <form id="form-paquete" method="post">
+            <div class="form-group">
+                <label>Nombre de Paquete</label>
+                <input id="paquete" type="text" class="form-control" name="paquete" placeholder="Nombre de Paquete" required>
+            </div>
+            <div class="form-group">
+                <label>Costo Temporada Alta</label>
+                <input id="precioalta" type="number" class="form-control" step="any" name="precioalta" required>
+            </div>
+            <div class="form-group">
+                <label>Costo Temporada Baja</label>
+                <input id="preciobaja" type="number" class="form-control" step="any" name="preciobaja" required>
+            </div>
+            <div class="form-group">
+                <label>Días</label>
+                <input id="dias" type="number" class="form-control" name="dias" required>
+            </div>
+            <div class="form-group">
+                <label>Incluye</label>
+                <textarea id="incluye" class="form-control incluye" name="incluye" required></textarea>
+            </div>
+            <div class="form-group">
+                <label>Itinerario</label>
+                <textarea id="itinerario" class="form-control itinerario" name="itinerario" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Registrar</button>
+        </form>
+    </div>
+</div>
+<script>
+    CKEDITOR.replace('incluye');
+    CKEDITOR.replace('itinerario');
+</script>
+

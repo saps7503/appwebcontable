@@ -1,0 +1,59 @@
+﻿
+<nav class="navbar navbar-default" role="navigation">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse"
+                data-target=".navbar-ex1-collapse">
+            <span class="sr-only">Desplegar navegación</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+    </div>
+
+    <div class="collapse navbar-collapse navbar-ex1-collapse">
+        <ul class="nav navbar-nav">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    Movimientos<b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>@Html.ActionLink("Registrar", "Movimiento", "Movimiento", new { area = "" }, new { @class = "listLabel" })</li>
+                    <li class="divider"></li>
+                    <li>@Html.ActionLink("Ver", "ver", "Movimiento", new { area = "" }, new { @class = "listLabel" })</li>
+                    <!--<li class="divider"></li>-->
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    Cuentas Bancarias<b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>@Html.ActionLink("Crear", "Crear", "Cuenta", new { area = "" }, new { @class = "listLabel" })</li>
+                    <li class="divider"></li>
+                    <li>@Html.ActionLink("Ver", "ver", "Cuenta", new { area = "" }, new { @class = "listLabel" })</li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    Ventas<b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>@Html.ActionLink("Resumen de Ventas", "reporteVentas", "Venta", new { area = "" }, new { @class = "listLabel" })</li>
+                    <li class="divider"></li>
+                    <li>@Html.ActionLink("Resumen Por Agentes", "reporteAgentes", "Venta", new { area = "" }, new { @class = "listLabel" })</li>
+                </ul>
+            </li>
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    @ViewBag.nombre <span class="glyphicon glyphicon-user"></span> <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="secciones">@Html.ActionLink("Cerrar Sesión", "CerrarSesion", "Home", new { area = "" }, new { @class = "listLabel" })</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>

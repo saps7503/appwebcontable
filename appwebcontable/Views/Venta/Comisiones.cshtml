@@ -1,0 +1,49 @@
+﻿
+@{
+    ViewBag.Title = "Comisiones";
+}
+<div class="row">
+    @Html.Partial("MenuAgenteDeVentas")
+    <h2>Comisiones</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th colspan="4">
+                    <input class="form-control" type="date" value="@ViewBag.fecha" onchange="comisionFecha(this.value)" />
+                </th>
+            </tr>
+            <tr>
+                <th><p>Cliente</p></th>
+                <th><p>Venta</p></th>
+                <th><p>Total Venta</p></th>
+                <th><p>Comisión @ViewBag.comision%</p></th>
+                <th><p>Status</p></th>
+            </tr>
+        </thead>
+        <tbody id="tbodyComision">
+            @if (ViewBag.Countcomision > 0)
+            {
+
+                foreach (var item in ViewBag.Listcomisiones)
+                {
+                <tr>
+                    <th>@item.cliente</th>
+                    <th>@item.venta</th>
+                    <th>@item.total MXN$</th>
+                    <th>@item.comision MXN$</th>
+                    <th>@item.status</th>
+                    
+                </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <th>Sin registros</th>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+

@@ -1,0 +1,223 @@
+﻿
+@{
+    ViewBag.Title = "Ventas";
+}
+
+
+
+<div class="row background-forms">
+    @Html.Partial("MenuAgenteDeVentas")
+    <div class="col-lg-6">
+        <h2>Nueva Venta</h2>
+        <input type="hidden" id="tempo-hide" value=@ViewBag.temporada />
+        <form id="form-venta" method="post">
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label>Cliente</label>
+                    <input id="cliente" type="text" class="form-control" name="cliente" placeholder="Nombre del Cliente" required>
+                    <!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Tipo de Servicio</label>
+                    <input id="tiposervicio" type="text" class="form-control" name="tiposervicio" placeholder="Tipo de Servicio" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label>Correo</label>
+                    <input id="correo" type="email" class="form-control" name="correo" required>
+                    <!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Telefono</label>
+                    <input id="telefono" type="text" class="form-control" name="telefono" placeholder="telefono" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label>Nombre de Servicio</label>
+                    <input id="nombreservicio" type="text" class="form-control" name="nombreservicio" placeholder="Nombre del Servicio" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Tipo de Pago</label>
+                    <select id="pago" class="form-control" name="pago" onchange="tipoPagoRef(this.value)" required>
+                        <option value="efectivo">Efectivo</option>
+                        <option value="transferencia">Transferencia</option>
+                        <option value="deposito">Deposito</option>
+                        <option value="deposito">Tarjeta  de Credito</option>
+                    </select>
+                </div>
+            </div>
+            <div id="fechas-paquete" class="row">
+                <div class="form-group col-md-6">
+                    <label>Inicio</label>
+                    <input id="inicio" type="date" class="form-control" name="inicio" value="@ViewBag.fecha" required>
+                    <small id="emailHelp" class="form-text text-muted">En Caso de ser un Tour coloque la misma fecha en ambos recuadros.</small>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Final</label>
+                    <input id="final" type="date" class="form-control" name="final" value="@ViewBag.fecha" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label>Total</label>
+                    <input id="total" type="number" class="form-control" name="total" placeholder="Monto Total" step="any" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Anticipo</label>
+                    <input id="anticipo" type="number" class="form-control" name="anticipo" placeholder="Anticipo" step="any" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label>Saldo</label>
+                    <input id="saldo" type="number" class="form-control" name="saldo" placeholder="Saldo" step="any" required>
+                </div>
+                <div class="form-group col-md-6 comision-user">
+                    <label>Referencia</label>
+                    <input id="referencia" type="text" class="form-control" name="referencia" placeholder="Referencia" value="" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label>Comentarios</label>
+                    <textarea id="comentarios" class="form-control" name="comentarios" required></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Registrar</button>
+            </div>           
+        </form>
+    </div>
+    <div class="col-lg-6">
+        <select class="form-control" name="pago-select" onchange="selectService(this.value,@ViewBag.temporada)">
+            <option value="1">Paquetes</option>
+            <option value="2">Tours</option>
+        </select>
+        <br />
+        <table class="table">
+            <thead>
+                <tr>
+                    <th><p>Servicio</p></th>
+                    <th><p>Precio MXN$</p></th>
+                    <th><p>Opciones</p></th>
+                </tr>
+            </thead>
+            <tbody id="tbodyVenta">
+                @if (ViewBag.countPaquetes > 0)
+                {
+                    foreach (var item in ViewBag.vistaListaPaquetes)
+                    {
+                        Double c = 0;
+                        if (@ViewBag.temporada == 1)
+                        {
+                            c = @item.costo_alta;
+                        }
+                        else
+                        {
+                            c = @item.costo_baja;
+                        }
+                        <tr ondblclick="selectCompra('@item.nombre','@c','Paquete')">
+                            <th>@item.nombre</th>
+                            @if (@ViewBag.temporada == 1)
+                            {
+                                <th>@item.costo_alta</th>
+                            }
+                            else
+                            {
+                                <th>@item.costo_baja</th>
+                            }
+                            <th>
+                                <input class="btn btn-success detalles" onclick="verPaquete(@item.id)" type="button" value="Detalles" />
+                            </th>
+                        </tr>
+                    }
+                }else{
+                    <tr><th>No hay Paquetes</th></tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <div class="overlay-container-pack modal">
+        <div class="window-container zoomin">
+            <div align="right"><span class="glyphicon glyphicon-remove close"></span></div>
+            <h3 align="center">Detalles de Paquete</h3>
+            <br />
+            <hr />
+            <form method="post">
+                <table>
+                    <tr>
+                        <th><p class="text-data">Nombre:</p></th>
+                        <th><p id="nombreM" class="text-data"></p></th>
+                    </tr>
+                    <tr>
+                        <th><p class="text-data">Costo Temporada Alta:</p></th>
+                        <th><p id="precioaltaM" class="text-data"></p></th>
+                    </tr>
+                    <tr>
+                        <th><p class="text-data">Costo Temporada Baja:</p></th>
+                        <th><p id="preciobajaM" class="text-data"></p></th>
+                    </tr>
+                    <tr>
+                        <th><p class="text-data">Días:</p></th>
+                        <th><p id="diasM" class="text-data"></p></th>
+                    </tr>
+                    <tr>
+                        <th><p class="text-data">Incluye:</p></th>
+                        <th><p id="incluyeM" class="text-data"></p></th>
+                    </tr>
+                    <tr>
+                        <th><p class="text-data">Itinerario:</p></th>
+                        <th><p id="itinerarioM" class="text-data"></p></th>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+    <div class="overlay-container-tour modal">
+        <div class="window-container zoomin">
+            <div align="right"><span class="glyphicon glyphicon-remove close"></span></div>
+            <h3 align="center">Detalles de Tour</h3>
+            <br />
+            <hr />
+            <form method="post">
+                <table>
+                    <tr>
+                        <th><p class="text-data">Nombre:</p></th>
+                        <th><p id="nombreMT" class="text-data"></p></th>
+                    </tr>
+                    <tr>
+                        <th><p class="text-data">Saliendo de:</p></th>
+                        <th><p id="saleM" class="text-data"></p></th>
+                    </tr>
+                    <tr>
+                        <th><p class="text-data">Descripcion:</p></th>
+                        <th><p id="descripcionM" class="text-data"></p></th>
+                    </tr>
+                    <tr>
+                        <th><p class="text-data">Hora de Salida:</p></th>
+                        <th><p id="salidaM" class="text-data"></p></th>
+                    </tr>
+                    <tr>
+                        <th><p class="text-data">Hora de Regreso:</p></th>
+                        <th><p id="regresoM" class="text-data"></p></th>
+                    </tr>
+                    <tr>
+                        <th><p class="text-data">Duración:</p></th>
+                        <th><p id="duracionM" class="text-data"></p></th>
+                    </tr>
+                    <tr>
+                        <th><p class="text-data">Costo temporada alta:</p></th>
+                        <th><p id="tempAltaM" class="text-data"></p></th>
+                    </tr>
+                    <tr>
+                        <th><p class="text-data">Costo temporada baja:</p></th>
+                        <th><p id="tempBajaM" class="text-data"></p></th>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
